@@ -9,6 +9,6 @@ require (
 	github.com/go-ole/go-ole v1.2.4 // indirect
 	github.com/opencontainers/runtime-spec v1.0.2-0.20190716192640-c9a5f6194441
 	github.com/shirou/gopsutil v2.20.5+incompatible
-	github.com/shirou/w32 v0.0.0-20160930032740-bb4de0191aa4 // indirect
 	github.com/sirupsen/logrus v1.5.0
 )
+replace github.com/chaosblade-io/chaosblade-spec-go v0.6.1-0.20200628025133-fa9dc1fa51a6 => /Users/Shared/ChaosBladeProjects/chaosblade-opensource/chaosblade-spec-go

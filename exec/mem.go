@@ -81,10 +81,6 @@ func (*MemCommandModelSpec) LongDesc() string {
 	return "Mem experiment, for example load"
 }
 
-func (*MemCommandModelSpec) Example() string {
-	return "mem load"
-}
-
 type loadActionCommand struct {
 	spec.BaseExpActionCommandSpec
 }
@@ -101,8 +97,30 @@ func (*loadActionCommand) ShortDesc() string {
 	return "mem load"
 }
 
-func (*loadActionCommand) LongDesc() string {
-	return "mem load"
+func (l *loadActionCommand) LongDesc() string {
+	if l.ActionLongDesc != "" {
+		return l.ActionLongDesc
+	}
+	return "Create chaos engineering experiments with memory load"
+}
+
+func (l *loadActionCommand) Example() spec.Example {
+	if l.ActionExample.Introduction != "" || l.ActionExample.Introduction != "" || l.ActionExample.ExampleCommands != nil {
+		return l.ActionExample
+	}
+	example := spec.Example{
+		ExampleCommands: []spec.ExampleCommand{
+			{
+				Annotation: "The execution memory footprint is 50%",
+				Command: "blade c mem load --mode ram --mem-percent 50",
+			},
+			{
+				Annotation: "200M memory is reserved, and the total memory size is 1G",
+				Command: "blade c mem load --mode ram --reserve 200 --rate 100",
+			},
+		},
+	}
+	return example;
 }
 
 func (*loadActionCommand) Matchers() []spec.ExpFlagSpec {

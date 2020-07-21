@@ -57,8 +57,38 @@ func (*LossActionSpec) ShortDesc() string {
 	return "Loss network package"
 }
 
-func (*LossActionSpec) LongDesc() string {
+func (l *LossActionSpec) LongDesc() string {
+	if l.ActionLongDesc != "" {
+		return l.ActionLongDesc
+	}
 	return "Loss network package"
+}
+
+func (l *LossActionSpec) Example() spec.Example {
+	if l.ActionExample.Introduction != "" || l.ActionExample.Introduction != "" || l.ActionExample.ExampleCommands != nil {
+		return l.ActionExample
+	}
+	example := spec.Example{
+		ExampleCommands: []spec.ExampleCommand{
+			{
+				Annotation: "Access to native 8080 and 8081 ports lost 70% of packets",
+				Command: "blade create network loss --percent 70 --interface eth0 --local-port 8080,8081",
+			},
+			{
+				Annotation: "The machine accesses external 14.215.177.39 machine (ping www.baidu.com) 80 port packet loss rate 100%",
+				Command: "blade create network loss --percent 100 --interface eth0 --remote-port 80 --destination-ip 14.215.177.39",
+			},
+			{
+				Annotation: "Do 60% packet loss for the entire network card Eth0, excluding ports 22 and 8000 to 8080",
+				Command: "blade create network loss --percent 60 --interface eth0 --exclude-port 22,8000-8080",
+			},
+			{
+				Annotation: "Realize the whole network card is not accessible, not accessible time 20 seconds. After executing the following command, the current network is disconnected and restored in 20 seconds. Remember!! Don't forget -timeout parameter",
+				Command: "blade create network loss --percent 100 --interface eth0 --timeout 20",
+			},
+		},
+	}
+	return example
 }
 
 type NetworkLossExecutor struct {

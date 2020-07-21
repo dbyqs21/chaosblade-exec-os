@@ -61,8 +61,34 @@ func (*DelayActionSpec) ShortDesc() string {
 	return "Delay experiment"
 }
 
-func (*DelayActionSpec) LongDesc() string {
+func (d *DelayActionSpec) LongDesc() string {
+	if d.ActionLongDesc != "" {
+		return d.ActionLongDesc
+	}
 	return "Delay experiment"
+}
+
+func (d *DelayActionSpec) Example() spec.Example {
+	if d.ActionExample.Introduction != "" || d.ActionExample.Introduction != "" || d.ActionExample.ExampleCommands != nil {
+		return d.ActionExample
+	}
+	example := spec.Example{
+		ExampleCommands: []spec.ExampleCommand{
+			{
+				Annotation: "Access to native 8080 and 8081 ports is delayed by 3 seconds, and the delay time fluctuates by 1 second",
+				Command: "blade create network delay --time 3000 --offset 1000 --interface eth0 --local-port 8080,8081",
+			},
+			{
+				Annotation: "Local access to external 14.215.177.39 machine (ping www.baidu.com obtained IP) port 80 delay of 3 seconds",
+				Command: "blade create network delay --time 3000 --interface eth0 --remote-port 80 --destination-ip 14.215.177.39",
+			},
+			{
+				Annotation: "Do a 5 second delay for the entire network card eth0, excluding ports 22 and 8000 to 8080",
+				Command: "blade create network delay --time 5000 --interface eth0 --exclude-port 22,8000-8080",
+			},
+		},
+	}
+	return example
 }
 
 type NetworkDelayExecutor struct {

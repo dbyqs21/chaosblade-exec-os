@@ -72,8 +72,26 @@ func (*ReorderActionSpec) ShortDesc() string {
 	return "Reorder experiment"
 }
 
-func (*ReorderActionSpec) LongDesc() string {
+func (r *ReorderActionSpec) LongDesc() string {
+	if r.ActionLongDesc != "" {
+		return r.ActionLongDesc
+	}
 	return "Reorder experiment"
+}
+
+func (r *ReorderActionSpec) Example() spec.Example {
+	if r.ActionExample.Introduction != "" || r.ActionExample.Introduction != "" || r.ActionExample.ExampleCommands != nil {
+		return r.ActionExample
+	}
+	example := spec.Example{
+		ExampleCommands: []spec.ExampleCommand{
+			{
+				Annotation: "Access the specified IP request packet disorder",
+				Command: "blade c network reorder --correlation 80 --percent 50 --gap 2 --time 500 --interface eth0 --destination-ip 180.101.49.12",
+			},
+		},
+	}
+	return example
 }
 
 type NetworkReorderExecutor struct {

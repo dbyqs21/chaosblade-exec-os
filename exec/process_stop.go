@@ -60,8 +60,30 @@ func (*StopProcessActionCommandSpec) ShortDesc() string {
 	return "process fake death"
 }
 
-func (*StopProcessActionCommandSpec) LongDesc() string {
+func (s *StopProcessActionCommandSpec) LongDesc() string {
+	if s.ActionLongDesc != "" {
+		return s.ActionLongDesc
+	}
 	return "process fake death by process id or process name"
+}
+
+func (s *StopProcessActionCommandSpec) Example() spec.Example {
+	if s.ActionExample.Introduction != "" || s.ActionExample.Introduction != "" || s.ActionExample.ExampleCommands != nil {
+		return s.ActionExample
+	}
+	example := spec.Example{
+		ExampleCommands: []spec.ExampleCommand{
+			{
+				Annotation: "Pause the process that contains the `SimpleHTTPServer` keyword",
+				Command: "blade create process stop --process SimpleHTTPServer",
+			},
+			{
+				Annotation: "Pause the Java process",
+				Command: "blade create process stop --process-cmd java",
+			},
+		},
+	}
+	return example
 }
 
 type StopProcessExecutor struct {

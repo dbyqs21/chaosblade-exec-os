@@ -57,8 +57,26 @@ func (*DuplicateActionSpec) ShortDesc() string {
 	return "Duplicate experiment"
 }
 
-func (*DuplicateActionSpec) LongDesc() string {
+func (d *DuplicateActionSpec) LongDesc() string {
+	if d.ActionLongDesc != "" {
+		return d.ActionLongDesc
+	}
 	return "Duplicate experiment"
+}
+
+func (d *DuplicateActionSpec) Example() spec.Example {
+	if d.ActionExample.Introduction != "" || d.ActionExample.Introduction != "" || d.ActionExample.ExampleCommands != nil {
+		return d.ActionExample
+	}
+	example := spec.Example{
+		ExampleCommands: []spec.ExampleCommand{
+			{
+				Annotation: "Specify the network card eth0 and repeat the packet by 10%",
+				Command: "blade create network duplicate --percent=10 --interface=eth0",
+			},
+		},
+	}
+	return example
 }
 
 type NetworkDuplicateExecutor struct {

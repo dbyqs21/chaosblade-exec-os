@@ -78,10 +78,6 @@ func (*CpuCommandModelSpec) LongDesc() string {
 	return "Cpu experiment, for example full load"
 }
 
-func (*CpuCommandModelSpec) Example() string {
-	return "blade create cpu load --cpu-percent 80"
-}
-
 type fullLoadActionCommand struct {
 	spec.BaseExpActionCommandSpec
 }
@@ -98,8 +94,38 @@ func (*fullLoadActionCommand) ShortDesc() string {
 	return "cpu load"
 }
 
-func (*fullLoadActionCommand) LongDesc() string {
-	return "cpu load"
+func (f *fullLoadActionCommand) LongDesc() string {
+	if f.ActionLongDesc != "" {
+		return f.ActionLongDesc
+	}
+	return "Create chaos engineering experiments with CPU load"
+}
+
+func (f *fullLoadActionCommand) Example() spec.Example {
+	if f.ActionExample.Introduction != "" || f.ActionExample.Introduction != "" || f.ActionExample.ExampleCommands != nil {
+		return f.ActionExample
+	}
+	example := spec.Example{
+		ExampleCommands: []spec.ExampleCommand{
+			{
+				Annotation: "Create a CPU full load experiment",
+				Command: "blade create cpu load",
+			},
+			{
+				Annotation: "Specifies that the kernel is full load with index 0, 3, and that the kernel's index starts at 0",
+				Command: "blade create cpu load --cpu-list 0,3",
+			},
+			{
+				Annotation: "Specify the kernel full load of indexes 1-3",
+				Command: "blade create cpu load --cpu-list 1-3",
+			},
+			{
+				Annotation: "Specified percentage load",
+				Command: "blade create cpu load --cpu-percent 60",
+			},
+		},
+	}
+	return example
 }
 
 func (*fullLoadActionCommand) Matchers() []spec.ExpFlagSpec {

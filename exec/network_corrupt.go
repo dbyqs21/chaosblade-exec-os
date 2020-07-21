@@ -16,6 +16,7 @@
 
 package exec
 
+import "C"
 import (
 	"context"
 	"fmt"
@@ -57,8 +58,26 @@ func (*CorruptActionSpec) ShortDesc() string {
 	return "Corrupt experiment"
 }
 
-func (*CorruptActionSpec) LongDesc() string {
+func (c *CorruptActionSpec) LongDesc() string {
+	if c.ActionLongDesc != "" {
+		return c.ActionLongDesc
+	}
 	return "Corrupt experiment"
+}
+
+func (c *CorruptActionSpec) Example() spec.Example {
+	if c.ActionExample.Introduction != "" || c.ActionExample.Introduction != "" || c.ActionExample.ExampleCommands != nil {
+		return c.ActionExample
+	}
+	example := spec.Example{
+		ExampleCommands: []spec.ExampleCommand{
+			{
+				Annotation: "Access to the specified IP request packet is corrupted, 80% of the time",
+				Command: "blade create network corrupt --percent 80 --destination-ip 180.101.49.12 --interface eth0",
+			},
+		},
+	}
+	return example
 }
 
 type NetworkCorruptExecutor struct {

@@ -77,8 +77,34 @@ func (*KillProcessActionCommandSpec) ShortDesc() string {
 	return "Kill process"
 }
 
-func (*KillProcessActionCommandSpec) LongDesc() string {
+func (k *KillProcessActionCommandSpec) LongDesc() string {
+	if k.ActionLongDesc != "" {
+		return k.ActionLongDesc
+	}
 	return "Kill process by process id or process name"
+}
+
+func (k *KillProcessActionCommandSpec) Example() spec.Example {
+	if k.ActionExample.Introduction != "" || k.ActionExample.Introduction != "" || k.ActionExample.ExampleCommands != nil {
+		return k.ActionExample
+	}
+	example := spec.Example{
+		ExampleCommands: []spec.ExampleCommand{
+			{
+				Annotation: "Kill the process that contains the `SimpleHTTPServer` keyword",
+				Command: "blade create process kill --process SimpleHTTPServer",
+			},
+			{
+				Annotation: "Kill the Java process",
+				Command: "blade create process kill --process-cmd java",
+			},
+			{
+				Annotation: "Specifies the semaphore and local port to kill the process",
+				Command: "blade c process kill --local-port 8080 --signal 15",
+			},
+		},
+	}
+	return example
 }
 
 type KillProcessExecutor struct {

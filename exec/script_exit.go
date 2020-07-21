@@ -61,8 +61,26 @@ func (*ScriptExitActionCommand) ShortDesc() string {
 	return "Exit script"
 }
 
-func (*ScriptExitActionCommand) LongDesc() string {
+func (s *ScriptExitActionCommand) LongDesc() string {
+	if s.ActionLongDesc != "" {
+		return s.ActionLongDesc
+	}
 	return "Exit script with specify message and code"
+}
+
+func (s *ScriptExitActionCommand) Example() spec.Example {
+	if s.ActionExample.Introduction != "" || s.ActionExample.Introduction != "" || s.ActionExample.ExampleCommands != nil {
+		return s.ActionExample
+	}
+	example := spec.Example{
+		ExampleCommands: []spec.ExampleCommand{
+			{
+				Annotation: "Add commands to the script `start0() { echo this-is-error-message; exit 1; ... }`",
+				Command: "blade create script exit --exit-code 1 --exit-message this-is-error-message --file test.sh --function-name start0",
+			},
+		},
+	}
+	return example
 }
 
 type ScriptExitExecutor struct {

@@ -66,8 +66,30 @@ func (*OccupyActionSpec) ShortDesc() string {
 	return "Occupy the specify port"
 }
 
-func (*OccupyActionSpec) LongDesc() string {
+func (o *OccupyActionSpec) LongDesc() string {
+	if o.ActionLongDesc != "" {
+		return o.ActionLongDesc
+	}
 	return "Occupy the specify port, if the port is used, it will return fail, except add --force flag"
+}
+
+func (o *OccupyActionSpec) Example() spec.Example {
+	if o.ActionExample.Introduction != "" || o.ActionExample.Introduction != "" || o.ActionExample.ExampleCommands != nil {
+		return o.ActionExample
+	}
+	example := spec.Example{
+		ExampleCommands: []spec.ExampleCommand{
+			{
+				Annotation: "Specify port 8080 occupancy",
+				Command: "blade c network occupy --port 8080 --force",
+			},
+			{
+				Annotation: "The machine accesses external 14.215.177.39 machine (ping www.baidu.com) 80 port packet loss rate 100%",
+				Command: "blade create network loss --percent 100 --interface eth0 --remote-port 80 --destination-ip 14.215.177.39",
+			},
+		},
+	}
+	return example
 }
 
 type OccupyActionExecutor struct {
